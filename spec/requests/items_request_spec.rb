@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
+
 require 'rails_helper'
 
 describe 'Items API' do
   it 'returns a list of all items' do
     id = create(:merchant).id
-    
+
     create_list(:item, 3, merchant_id: id)
 
     get '/api/v1/items'
@@ -34,4 +36,33 @@ describe 'Items API' do
       expect(item[:merchant_id]).to eq(id)
     end
   end
+
+  it 'returns a single item by item id' do
+    merch_id = create(:merchant).id
+
+    id = create(:item, merchant_id: merch_id)
+
+    get "/api/v1/items/#{id}"
+
+    item = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+
+    expect(item).to have_key(:id)
+    expect(item[:id]).to eq(id)
+
+    expect(item).to have_key(:name)
+    expect(item[:name]).to be_a(String)
+
+    expect(item).to have_key(:description)
+    expect(item[:description]).to be_a(String)
+
+    expect(item).to have_key(:unit_price)
+    expect(item[:unit_price]).to be_a(Float)
+
+    expect(item).to have_key(:merchant_id)
+    expect(item[:merchant_id]).to eq(merch_id)
+  end
 end
+
+# rubocop:enable Metrics/BlockLength
