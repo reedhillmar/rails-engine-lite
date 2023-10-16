@@ -71,17 +71,17 @@ describe 'Items API' do
                     description: 'Dark Sour Ale',
                     unit_price: 8.76 }
 
-    headers = {'CONTENT_TYPE' => 'application/json'}
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    post "/api/v1/merchants/#{merch_id}/items", headers: headers, params: JSON.generate(item: item_params)
+    post "/api/v1/merchants/#{merch_id}/items", headers:, params: JSON.generate(item: item_params)
 
     created_item = Item.last
 
     expect(response).to be_successful
-    expect(create_item.name).to eq(item_params[:name])
-    expect(create_item.description).to eq(item_params[:description])
-    expect(create_item.unit_price).to eq(item_params[:unit_price])
-    expect(create_item.merchant_id).to eq(merch_id)
+    expect(created_item.name).to eq(item_params[:name])
+    expect(created_item.description).to eq(item_params[:description])
+    expect(created_item.unit_price).to eq(item_params[:unit_price])
+    expect(created_item.merchant_id).to eq(merch_id)
   end
 end
 

@@ -1,3 +1,6 @@
 # frozen_string_literal: true
 
-class Item < ApplicationRecord; end
+# app/models/item.rb
+class Item < ApplicationRecord
+  belongs_to :merchant
+end
