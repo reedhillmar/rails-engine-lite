@@ -40,7 +40,7 @@ describe 'Items API' do
   it 'returns a single item by item id' do
     merch_id = create(:merchant).id
 
-    id = create(:item, merchant_id: merch_id)
+    id = create(:item, merchant_id: merch_id).id
 
     get "/api/v1/items/#{id}"
 
