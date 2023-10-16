@@ -63,6 +63,26 @@ describe 'Items API' do
     expect(item).to have_key(:merchant_id)
     expect(item[:merchant_id]).to eq(merch_id)
   end
+
+  it 'can create a new item' do
+    merch_id = create(:merchant).id
+
+    item_params = { name: 'La Folie',
+                    description: 'Dark Sour Ale',
+                    unit_price: 8.76 }
+
+    headers = {'CONTENT_TYPE' => 'application/json'}
+
+    post "/api/v1/merchants/#{merch_id}/items", headers: headers, params: JSON.generate(item: item_params)
+
+    created_item = Item.last
+
+    expect(response).to be_successful
+    expect(create_item.name).to eq(item_params[:name])
+    expect(create_item.description).to eq(item_params[:description])
+    expect(create_item.unit_price).to eq(item_params[:unit_price])
+    expect(create_item.merchant_id).to eq(merch_id)
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
