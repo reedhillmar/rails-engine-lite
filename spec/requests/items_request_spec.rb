@@ -83,6 +83,21 @@ describe 'Items API' do
     expect(created_item.unit_price).to eq(item_params[:unit_price])
     expect(created_item.merchant_id).to eq(merch_id)
   end
+
+  it 'can edit an item' do
+    merch_id = create(:merchant).id
+    item_id = create(:item, merchant_id: merch_id).id
+    previous_price = Item.last.unit_price
+    item_params = { unit_price: 3.08 }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    patch "/api/v1/merchants/#{merch_id}/items/#{item_id}", headers:, params: JSON.generate(item: item_params)
+    item = Item.find_by(id: item_id)
+
+    expect(response).to be_successful
+    expect(item.unit_price).to_not eq(previous_price)
+    expect(item.unit_price).t0 eq(3.08)
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
