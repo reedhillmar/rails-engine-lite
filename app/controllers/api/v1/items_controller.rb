@@ -5,23 +5,11 @@ module Api
     # app/controllers/api/v1/items_controller
     class ItemsController < ApplicationController
       def index
-        render json: Item.all
+        render json: ItemSerializer.new(Item.all)
       end
 
       def show
-        render json: Item.find(params[:id])
-      end
-
-      def create
-        render json: Merchant.find(params[:merchant_id]).items.create(item_params)
-      end
-
-      def update
-        render json: Item.update(params[:id], item_params)
-      end
-
-      def destroy
-        render json: Item.delete(params[:id])
+        render json: ItemSerializer.new(Item.find(params[:id]))
       end
 
       private
