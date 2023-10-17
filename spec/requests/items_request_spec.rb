@@ -96,7 +96,7 @@ describe 'Items API' do
 
     expect(response).to be_successful
     expect(item.unit_price).to_not eq(previous_price)
-    expect(item.unit_price).t0 eq(3.08)
+    expect(item.unit_price).to eq(3.08)
   end
 end
 

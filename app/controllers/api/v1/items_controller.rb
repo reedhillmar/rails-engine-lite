@@ -16,6 +16,10 @@ module Api
         render json: Merchant.find(params[:merchant_id]).items.create(item_params)
       end
 
+      def update
+        render json: Merchant.find(params[:merchant_id]).items.update(params[:id], item_params)
+      end
+
       private
 
       def item_params
