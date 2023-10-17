@@ -17,7 +17,11 @@ module Api
       end
 
       def update
-        render json: Merchant.find(params[:merchant_id]).items.update(params[:id], item_params)
+        render json: Item.update(params[:id], item_params)
+      end
+
+      def destroy
+        render json: Item.delete(params[:id])
       end
 
       private
