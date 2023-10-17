@@ -98,6 +98,19 @@ describe 'Items API' do
     expect(item.unit_price).to_not eq(previous_price)
     expect(item.unit_price).to eq(3.08)
   end
+
+  it 'can delete an item' do
+    merch_id = create(:merchant).id
+    item_id = create(:item, merchant_id: merch_id).id
+
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/merchants/#{merch_id}/items/#{item_id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(0)
+    expect(Item.find(item_id)).to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
