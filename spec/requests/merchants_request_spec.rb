@@ -49,9 +49,9 @@ describe 'Merchants API' do
     first = Item.first
     second = Item.second
     third = Item.third
-    fourth = Item.last
+    last = Item.last
 
-    get "/api/v1/merchants/#{id}/items"
+    get "/api/v1/merchants/#{merchant.id}/items"
 
     expect(response).to be_successful
     expect(merchant.items.count).to eq(4)
