@@ -5,24 +5,28 @@ module Api
     # app/controllers/api/v1/items_controller
     class Merchants::ItemsController < ApplicationController
       def index
-        render json: ItemSerializer.new(Item.where(merchant_id: params[:merchant_id]))
+        if Merchant.find(params[:merchant_id])
+          render json: ItemSerializer.new(Item.where(merchant_id: params[:merchant_id]))
+        else
+          head 404
+        end
       end
 
       def show
         render json: ItemSerializer.new(Item.find(params[:id]))
       end
 
-      def create
-        render json: Merchant.find(params[:merchant_id]).items.create(item_params)
-      end
+      # def create
+      #   render json: ItemSerializer.new(Merchant.find(params[:merchant_id]).items.create(item_params))
+      # end
 
-      def update
-        render json: Item.update(params[:id], item_params)
-      end
+      # def update
+      #   render json: ItemSerializer.new(Item.update(params[:id], item_params))
+      # end
 
-      def destroy
-        render json: Item.delete(params[:id])
-      end
+      # def destroy
+      #   render json: Item.delete(params[:id])
+      # end
 
       private
 

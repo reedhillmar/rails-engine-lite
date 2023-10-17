@@ -70,11 +70,12 @@ describe 'Items API' do
 
     item_params = { name: 'La Folie',
                     description: 'Dark Sour Ale',
-                    unit_price: 8.76 }
+                    unit_price: 8.76,
+                    merchant_id: merch_id }
 
     headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    post "/api/v1/merchants/#{merch_id}/items", headers:, params: JSON.generate(item: item_params)
+    post "/api/v1/items", headers:, params: JSON.generate(item: item_params)
 
     created_item = Item.last
 
@@ -92,7 +93,7 @@ describe 'Items API' do
     item_params = { unit_price: 3.08 }
     headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    patch "/api/v1/merchants/#{merch_id}/items/#{item_id}", headers:, params: JSON.generate(item: item_params)
+    patch "/api/v1/items/#{item_id}", headers:, params: JSON.generate(item: item_params)
     item = Item.find_by(id: item_id)
 
     expect(response).to be_successful
@@ -106,11 +107,24 @@ describe 'Items API' do
 
     expect(Item.count).to eq(1)
 
-    delete "/api/v1/merchants/#{merch_id}/items/#{item_id}"
+    delete "/api/v1/items/#{item_id}"
 
     expect(response).to be_successful
     expect(Item.count).to eq(0)
     expect { Item.find(item_id) }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'can return the merchant details for an item' do
+    merch = create(:merchant, name: "Perry's Premium Pils")
+
+    item_id = create(:item, merchant_id: merch.id).id
+
+    get "/api/v1/items/#{item_id}/merchant"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(merchant[:data][:attributes][:name]).to eq("Perry's Premium Pils")
   end
 end
 

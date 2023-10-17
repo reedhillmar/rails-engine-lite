@@ -12,6 +12,29 @@ module Api
         render json: ItemSerializer.new(Item.find(params[:id]))
       end
 
+      def create
+        item = Item.create(item_params)
+        if item.save
+          head 201
+        else
+          head 400
+        end
+        response.body = ItemSerializer.new(item).to_json
+      end
+
+      # refactor me!!!
+      def update
+        if Item.find(params[:id]) && (!params[:merchant_id] || Merchant.find(params[:merchant_id]))
+          render json: ItemSerializer.new(Item.update(params[:id], item_params))
+        else
+          head 404
+        end
+      end
+
+      def destroy
+        render json: Item.delete(params[:id])
+      end
+
       private
 
       def item_params
