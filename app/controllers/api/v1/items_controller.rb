@@ -16,10 +16,10 @@ module Api
         item = Item.create(item_params)
         if item.save
           head 201
+          response.body = ItemSerializer.new(item).to_json
         else
           head 400
         end
-        response.body = ItemSerializer.new(item).to_json
       end
 
       # refactor me!!!
