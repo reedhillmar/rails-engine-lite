@@ -108,6 +108,8 @@ GEM
       rdoc
       reline (>= 0.3.8)
     json (2.6.3)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
     language_server-protocol (3.17.0.3)
     loofah (2.21.4)
       crass (~> 1.0.2)
@@ -252,6 +254,7 @@ DEPENDENCIES
   debug
   factory_bot_rails
   faker
+  jsonapi-serializer
   pg (~> 1.1)
   pry
   puma (~> 5.0)
