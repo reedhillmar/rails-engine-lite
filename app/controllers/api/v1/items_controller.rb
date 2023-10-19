@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 # app/controllers/api/v1/items_controller.rb
 class Api::V1::ItemsController < ApplicationController
   def index
@@ -21,7 +20,6 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
-  # refactor me!!!
   def update
     if Item.find(params[:id]) && (!params[:merchant_id] || Merchant.find(params[:merchant_id]))
       render json: ItemSerializer.new(Item.update(params[:id], item_params))
@@ -36,12 +34,16 @@ class Api::V1::ItemsController < ApplicationController
 
   def find_all
     if check_validity
-      # require 'pry';binding.pry
       render json: { errors: ["Your shit's fucked!"] }, status: 400
     else
-      # require 'pry';binding.pry
       render_search(select_search)
     end
+  end
+
+  private
+
+  def item_params
+    params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
   end
 
   def check_validity
@@ -68,6 +70,14 @@ class Api::V1::ItemsController < ApplicationController
     params[:max_price] && (params[:max_price] == '' || params[:max_price].to_f.negative?)
   end
 
+  def render_search(search)
+    if !search
+      render json: { data: [] }
+    else
+      render json: ItemSerializer.new(search)
+    end
+  end
+
   def select_search
     if params[:name]
       Item.name_search(params[:name])
@@ -80,19 +90,6 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
-  def render_search(search)
-    if !search
-      render json: { data: [] }
-    else
-      # require 'pry';binding.pry
-      render json: ItemSerializer.new(search)
-    end
-  end
-
-  def price_to_float(string)
-    string&.to_f
-  end
-
   def min
     price_to_float(params[:min_price])
   end
@@ -101,9 +98,7 @@ class Api::V1::ItemsController < ApplicationController
     price_to_float(params[:max_price])
   end
 
-  private
-
-  def item_params
-    params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
+  def price_to_float(string)
+    string&.to_f
   end
 end

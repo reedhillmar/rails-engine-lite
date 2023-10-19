@@ -46,14 +46,14 @@ describe 'Merchants API' do
     merchant2 = create(:merchant)
 
     create_list(:item, 4, merchant_id: merchant1.id)
-    
+
     first = Item.first
     second = Item.second
     third = Item.third
     last = Item.last
 
     create_list(:item, 8, merchant_id: merchant2.id)
-    
+
     get "/api/v1/merchants/#{merchant1.id}/items"
 
     expect(response).to be_successful
@@ -62,6 +62,17 @@ describe 'Merchants API' do
     expect(merchant1.items.second).to eq(second)
     expect(merchant1.items.third).to eq(third)
     expect(merchant1.items.last).to eq(last)
+  end
+
+  it 'sad path: returns 404 if merchant id not found' do
+    get "/api/v1/merchants/1/items"
+
+    data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+    expect(data[:message]).to eq("you have fucked up")
+    expect(data[:errors]).to eq("Your shit's fucked!")
   end
 end
 
