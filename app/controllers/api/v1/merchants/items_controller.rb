@@ -5,10 +5,10 @@ module Api
     # app/controllers/api/v1/items_controller
     class Merchants::ItemsController < ApplicationController
       def index
-        if Merchant.find(params[:merchant_id])
+        if (params[:merchant_id] == params[:merchant_id].to_i.to_s)&& Merchant.find(params[:merchant_id])
           render json: ItemSerializer.new(Item.where(merchant_id: params[:merchant_id]))
         else
-          head 404
+          render json: { message: "you have fucked up", errors: ["Your shit's fucked!"] }, status: 404
         end
       end
 
